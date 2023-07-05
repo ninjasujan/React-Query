@@ -1,2 +1,4 @@
-# React-Query
-The better way of handling Async request in react
+
+# React Query
+
+Better way to handle react async request state management and side effects in react
