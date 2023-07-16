@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-type postType = {
-  title: string;
-  location: string;
-};
+// type postType = {
+//   title: string;
+//   location: string;
+// };
 
 /** Sample data */
 const POST = [
@@ -12,8 +12,6 @@ const POST = [
 ];
 
 const App = () => {
-  const queryClient = useQueryClient();
-
   /** Delayed API call to simulate async fetch */
   const wait = (
     duration: number
@@ -27,16 +25,8 @@ const App = () => {
   const getQuery = useQuery({
     queryKey: ["POST"],
     queryFn: () => wait(1000).then((POST) => POST),
-  });
-
-  const postMutation = useMutation({
-    mutationFn: async (newPost: postType) => {
-      await wait(1000);
-      POST.push(newPost);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["POST"]);
-    },
+    staleTime: 1000,
+    refetchInterval: 1000,
   });
 
   if (getQuery.isError) {
@@ -55,18 +45,7 @@ const App = () => {
           <h4>Location: {post.location}</h4>
         </div>
       ))}
-      <div>
-        <button
-          onClick={() => {
-            postMutation.mutate({
-              title: "New Post",
-              location: "South",
-            });
-          }}
-        >
-          Add Post
-        </button>
-      </div>
+      <div></div>
     </>
   );
 };
